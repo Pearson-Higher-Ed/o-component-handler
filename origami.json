@@ -1,0 +1,14 @@
+{
+    "description": "Handles registration of new Origami components so that DOM upgrades are handled on page load and elements can be upgraded after initial page load.",
+    "origamiType": "module",
+    "origamiVersion": 1,
+    "support": "https://github.com/Financial-Times/o-component-handler/issues",
+    "supportStatus": "experimental",
+    "demos": [
+        {
+            "path": "/demos/demo.html",
+            "expanded": true,
+            "description": ""
+        }
+    ]
+}
