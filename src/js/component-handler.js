@@ -114,7 +114,7 @@ function upgradeElementInternal(element, jsClass) {
 
 /**
 * Registers a class for future use and attempts to upgrade existing DOM.
-* @param {object} config An object containting:
+* @param {object} config An object containing:
 * {constructor: Constructor, classAsString: string, cssClass: string}
 * @returns {undefined} No return.
 */
@@ -138,8 +138,8 @@ function registerInternal(config) {
 
 /**
 * Allows user to be alerted to any upgrades that are performed for a given
-* component type
-* @param {string} jsClass The class name of the MDL component we wish
+* component type.
+* @param {string} jsClass The class name of the Origami component we wish
 * to hook into for any upgrades performed.
 * @param {function} callback The function to call upon an upgrade. This
 * function should expect 1 parameter - the HTMLElement which got upgraded.
@@ -154,8 +154,7 @@ function registerUpgradedCallbackInternal(jsClass, callback) {
 
 
 /**
-* Upgrades all registered components found in the current DOM. This is
-* automatically called on window load.
+* Upgrades all registered components found in the current DOM.
 * @returns {undefined} No return.
 */
 function upgradeAllRegisteredInternal() {
