@@ -3,12 +3,5 @@
     "origamiType": "module",
     "origamiVersion": 1,
     "support": "https://github.com/Financial-Times/o-component-handler/issues",
-    "supportStatus": "experimental",
-    "demos": [
-        {
-            "path": "/demos/demo.html",
-            "expanded": true,
-            "description": ""
-        }
-    ]
+    "supportStatus": "experimental"
 }
