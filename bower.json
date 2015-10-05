@@ -2,7 +2,6 @@
   "name": "o-component-handler",
   "dependencies": {},
   "main": [
-    "main.scss",
     "main.js"
   ],
   "ignore": [
