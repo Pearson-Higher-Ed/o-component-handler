@@ -1,33 +1,32 @@
-/*global describe, it, before, beforeEach*/
-'use strict';
+/*global describe, it, before, beforeEach, sinon*/
 
-var expect = require('expect.js');
-var sinon = require('sinon');
-var componentHandler = require('../src/js/component-handler');
+const expect = require('expect.js');
+const componentHandler = require('../src/js/component-handler');
 
-var helpers = require('./helpers');
-var createAndRegisterTestComponent = helpers.createAndRegisterTestComponent;
-var createAndAppendComponentDomElement = helpers.createAndAppendComponentDomElement;
+const {
+	createAndRegisterTestComponent,
+	createAndAppendComponentDomElement
+} = require('./helpers');
 
-describe('componentHandler', function () {
+describe('componentHandler', () => {
 
-	before(function () {
-		window.GlobalComponent = function () {};
+	before(() => {
+		window.GlobalComponent = () => {};
 	});
 
-	beforeEach(function () {
+	beforeEach(() => {
 		document.body.innerHTML = '';
 	});
 
-	describe('.upgradeDom(jsClass, cssClass)', function() {
+	describe('.upgradeDom(jsClass, cssClass)', () => {
 
-		it('should upgrade all registered components when jsClass and cssClass are undefined', function () {
-			var config = createAndRegisterTestComponent(function ComponentTestUpgradeElement() {},
+		it('should upgrade all registered components when jsClass and cssClass are undefined', () => {
+			const config = createAndRegisterTestComponent(() => {},
 				'ComponentTestUpgradeElement');
-			var config2 = createAndRegisterTestComponent(function ComponentTestUpgradeElement() {},
+			const config2 = createAndRegisterTestComponent(() => {},
 				'ComponentTestUpgradeElement2');
-			var el = createAndAppendComponentDomElement(config.cssClass);
-			var el2 = createAndAppendComponentDomElement(config2.cssClass);
+			const el = createAndAppendComponentDomElement(config.cssClass);
+			const el2 = createAndAppendComponentDomElement(config2.cssClass);
 
 			componentHandler.upgradeDom();
 
@@ -35,13 +34,13 @@ describe('componentHandler', function () {
 			expect(el2.getAttribute('data-upgraded')).to.be(config2.classAsString);
 		});
 
-		it('should upgrade all registered components matching jsClass', function () {
-			var config = createAndRegisterTestComponent(function ComponentTestUpgradeElement() {},
+		it('should upgrade all registered components matching jsClass', () => {
+			const config = createAndRegisterTestComponent(() => {},
 				'ComponentTestUpgradeElement');
-			var config2 = createAndRegisterTestComponent(function ComponentTestUpgradeElement() {},
+			const config2 = createAndRegisterTestComponent(() => {},
 				'ComponentTestUpgradeElement2');
-			var el = createAndAppendComponentDomElement(config.cssClass);
-			var el2 = createAndAppendComponentDomElement(config2.cssClass);
+			const el = createAndAppendComponentDomElement(config.cssClass);
+			const el2 = createAndAppendComponentDomElement(config2.cssClass);
 
 			componentHandler.upgradeDom(config.classAsString);
 
@@ -49,12 +48,12 @@ describe('componentHandler', function () {
 			expect(el2.hasAttribute('data-upgraded')).to.be(false);
 		});
 
-		it('should upgrade all registered components matching cssClass', function () {
-			var cssClass = 'foo';
-			var config = createAndRegisterTestComponent(function ComponentTestUpgradeElement() {},
+		it('should upgrade all registered components matching cssClass', () => {
+			const cssClass = 'foo';
+			const config = createAndRegisterTestComponent(() => {},
 				'ComponentTestUpgradeElement');
-			var el = createAndAppendComponentDomElement(cssClass);
-			var el2 = createAndAppendComponentDomElement(cssClass);
+			const el = createAndAppendComponentDomElement(cssClass);
+			const el2 = createAndAppendComponentDomElement(cssClass);
 
 			componentHandler.upgradeDom(config.classAsString, cssClass);
 
@@ -64,33 +63,33 @@ describe('componentHandler', function () {
 
 	});
 
-	describe('.upgradeElement(element, jsClass)', function () {
+	describe('.upgradeElement(element, jsClass)', () => {
 
 		it('should upgrade the element with the components specified in the element\'s \'class\' ' +
-			'attribute when jsClass is undefined', function () {
-			var config = createAndRegisterTestComponent(function ComponentTestUpgradeElement() {},
+			'attribute when jsClass is undefined', () => {
+			const config = createAndRegisterTestComponent(() => {},
 				'ComponentTestUpgradeElement');
-			var el = createAndAppendComponentDomElement(config.cssClass);
+			const el = createAndAppendComponentDomElement(config.cssClass);
 
 			componentHandler.upgradeElement(el);
 
 			expect(el.getAttribute('data-upgraded')).to.be(config.classAsString);
 		});
 
-		it('should upgrade the element with the specified component', function () {
-			var config = createAndRegisterTestComponent(function ComponentTestUpgradeElement() {},
+		it('should upgrade the element with the specified component', () => {
+			const config = createAndRegisterTestComponent(() => {},
 				'ComponentTestUpgradeElement');
-			var el = createAndAppendComponentDomElement(config.cssClass);
+			const el = createAndAppendComponentDomElement(config.cssClass);
 
 			componentHandler.upgradeElement(el, config.classAsString);
 
 			expect(el.getAttribute('data-upgraded')).to.be(config.classAsString);
 		});
 
-		it('should upgrade the element once when called multiple times', function () {
-			var config = createAndRegisterTestComponent(function ComponentTestUpgradeElement() {},
+		it('should upgrade the element once when called multiple times', () => {
+			const config = createAndRegisterTestComponent(() => {},
 				'ComponentTestUpgradeElement');
-			var el = createAndAppendComponentDomElement(config.cssClass);
+			const el = createAndAppendComponentDomElement(config.cssClass);
 
 			componentHandler.upgradeElement(el, config.classAsString);
 			componentHandler.upgradeElement(el, config.classAsString);
@@ -98,12 +97,12 @@ describe('componentHandler', function () {
 			expect(el.getAttribute('data-upgraded')).to.be(config.classAsString);
 		});
 
-		it('should upgrade the element that has already been upgraded with a different component', function () {
-			var config = createAndRegisterTestComponent(function ComponentTestUpgradeElement() {},
+		it('should upgrade the element that has already been upgraded with a different component', () => {
+			const config = createAndRegisterTestComponent(() => {},
 				'ComponentTestUpgradeElement');
-			var config2 = createAndRegisterTestComponent(function ComponentTestUpgradeElement() {},
+			const config2 = createAndRegisterTestComponent(() => {},
 				'ComponentTestUpgradeElement2');
-			var el = createAndAppendComponentDomElement(config.cssClass);
+			const el = createAndAppendComponentDomElement(config.cssClass);
 
 			el.classList.add('component-test-upgrade-element-2');
 
@@ -114,8 +113,8 @@ describe('componentHandler', function () {
 		});
 
 		it('should check for the component in the global scope if it cannot be found in the list ' +
-			'of registered components', function () {
-			var el = createAndAppendComponentDomElement('global-component');
+			'of registered components', () => {
+			const el = createAndAppendComponentDomElement('global-component');
 
 			componentHandler.upgradeElement(el, 'GlobalComponent');
 
@@ -124,18 +123,18 @@ describe('componentHandler', function () {
 
 	});
 
-	describe('.register(config)', function () {
+	describe('.register(config)', () => {
 
-		it('should upgrade the existing DOM', function () {
+		it('should upgrade the existing DOM', () => {
 			function ComponentTestRegister() {}
 
-			var config = {
+			const config = {
 				constructor: ComponentTestRegister,
 				classAsString: 'ComponentTestRegister',
 				cssClass: 'component-test-register'
 			};
 
-			var el = document.createElement('div');
+			const el = document.createElement('div');
 
 			el.classList.add(config.cssClass);
 			document.body.appendChild(el);
@@ -147,13 +146,13 @@ describe('componentHandler', function () {
 
 	});
 
-	describe('.registerUpgradedCallback(jsClass, callback)', function () {
+	describe('.registerUpgradedCallback(jsClass, callback)', () => {
 
-		it('should register the callback function for the provided jsClass', function () {
-			var config = createAndRegisterTestComponent(function ComponentTestUpgradeElement() {},
+		it('should register the callback function for the provided jsClass', () => {
+			const config = createAndRegisterTestComponent(() => {},
 				'ComponentTestUpgradeElement');
-			var el = createAndAppendComponentDomElement(config.cssClass);
-			var callback = sinon.spy();
+			const el = createAndAppendComponentDomElement(config.cssClass);
+			const callback = sinon.spy();
 
 			componentHandler.registerUpgradedCallback(config.classAsString, callback);
 
@@ -164,15 +163,15 @@ describe('componentHandler', function () {
 
 	});
 
-	describe('.upgradeAllRegistered()', function () {
+	describe('.upgradeAllRegistered()', () => {
 
-		it('should upgrade all registered components on the page', function () {
-			var config = createAndRegisterTestComponent(function ComponentTestUpgradeElement() {},
+		it('should upgrade all registered components on the page', () => {
+			const config = createAndRegisterTestComponent(() => {},
 				'ComponentTestUpgradeElement');
-			var config2 = createAndRegisterTestComponent(function ComponentTestUpgradeElement() {},
+			const config2 = createAndRegisterTestComponent(() => {},
 				'ComponentTestUpgradeElement2');
-			var el = createAndAppendComponentDomElement(config.cssClass);
-			var el2 = createAndAppendComponentDomElement(config2.cssClass);
+			const el = createAndAppendComponentDomElement(config.cssClass);
+			const el2 = createAndAppendComponentDomElement(config2.cssClass);
 
 			componentHandler.upgradeAllRegistered();
 

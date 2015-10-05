@@ -1,12 +1,10 @@
-'use strict';
-
 /**
  * Adapted from https://github.com/jasonmayes/mdl-component-design-pattern,
  * written by Jason Mayes.
  */
 
-var registeredComponents_ = [];
-var createdComponents_ = [];
+const registeredComponents_ = [];
+const createdComponents_ = [];
 
 
 /**
@@ -14,11 +12,11 @@ var createdComponents_ = [];
 * Optionally replaces a match with passed object if specified.
 * @param {string} name The name of a class we want to use.
 * @param {object} opt_replace Optional object to replace match with.
-* @return {Object | false}
+* @returns {Object | false} The registered component or false.
 * @private
 */
 function findRegisteredClass_(name, opt_replace) {
-	for (var i = 0; i < registeredComponents_.length; i++) {
+	for (let i = 0; i < registeredComponents_.length; i++) {
 		if (registeredComponents_[i].className === name) {
 			if (opt_replace !== undefined) {
 				registeredComponents_[i] = opt_replace;
@@ -39,25 +37,26 @@ function findRegisteredClass_(name, opt_replace) {
 * to create a new instance of.
 * @param {string} cssClass The name of the CSS class elements of this type
 * will have.
+* @returns {undefined} No return.
 */
 function upgradeDomInternal(jsClass, cssClass) {
 	if (jsClass === undefined && cssClass === undefined) {
-		for (var i = 0; i < registeredComponents_.length; i++) {
+		for (let i = 0; i < registeredComponents_.length; i++) {
 			upgradeDomInternal(registeredComponents_[i].className,
 				registeredComponents_[i].cssClass);
 		}
 	} else {
 		if (cssClass === undefined) {
-			var registeredClass = findRegisteredClass_(jsClass);
+			const registeredClass = findRegisteredClass_(jsClass);
 
 			if (registeredClass) {
 				cssClass = registeredClass.cssClass;
 			}
 		}
 
-		var elements = document.querySelectorAll('.' + cssClass);
+		const elements = document.querySelectorAll('.' + cssClass);
 
-		for (var n = 0; n < elements.length; n++) {
+		for (let n = 0; n < elements.length; n++) {
 			upgradeElementInternal(elements[n], jsClass);
 		}
 	}
@@ -69,11 +68,12 @@ function upgradeDomInternal(jsClass, cssClass) {
 * @param {HTMLElement} element The element we wish to upgrade.
 * @param {string} jsClass The name of the class we want to upgrade
 * the element to.
+* @returns {undefined} No return.
 */
 function upgradeElementInternal(element, jsClass) {
 	if (jsClass === undefined) {
-		for (var i = 0; i < registeredComponents_.length; i++) {
-			var elemClasses = element.getAttribute('class').split(' ');
+		for (let i = 0; i < registeredComponents_.length; i++) {
+			const elemClasses = element.getAttribute('class').split(' ');
 
 			if (elemClasses.indexOf(registeredComponents_[i].cssClass) >= 0) {
 				upgradeElementInternal(element, registeredComponents_[i].className);
@@ -85,7 +85,7 @@ function upgradeElementInternal(element, jsClass) {
 
 	// Only upgrade elements that have not already been upgraded for the given
 	// Class type. This allows you to upgrade an element with multiple classes.
-	var dataUpgraded = element.getAttribute('data-upgraded');
+	let dataUpgraded = element.getAttribute('data-upgraded');
 	if (dataUpgraded === null || dataUpgraded.indexOf(jsClass) === -1) {
 		// Upgrade element.
 		if (dataUpgraded === null) {
@@ -95,9 +95,10 @@ function upgradeElementInternal(element, jsClass) {
 		}
 
 		element.setAttribute('data-upgraded', dataUpgraded + jsClass);
-		var registeredClass = findRegisteredClass_(jsClass);
+		const registeredClass = findRegisteredClass_(jsClass);
 		if (registeredClass) {
-			createdComponents_.push(new registeredClass.classConstructor(element));
+			const Component = registeredClass.classConstructor;
+			createdComponents_.push(new Component(element));
 			// Call any callbacks the user has registered with this component type.
 			registeredClass.callbacks.forEach(function (callback) {
 				callback(element);
@@ -115,16 +116,17 @@ function upgradeElementInternal(element, jsClass) {
 * Registers a class for future use and attempts to upgrade existing DOM.
 * @param {object} config An object containting:
 * {constructor: Constructor, classAsString: string, cssClass: string}
+* @returns {undefined} No return.
 */
 function registerInternal(config) {
-	var newConfig = {
+	const newConfig = {
 		'classConstructor': config.constructor,
 		'className': config.classAsString,
 		'cssClass': config.cssClass,
 		'callbacks': []
 	};
 
-	var found = findRegisteredClass_(config.classAsString, newConfig);
+	const found = findRegisteredClass_(config.classAsString, newConfig);
 
 	if (!found) {
 		registeredComponents_.push(newConfig);
@@ -141,9 +143,10 @@ function registerInternal(config) {
 * to hook into for any upgrades performed.
 * @param {function} callback The function to call upon an upgrade. This
 * function should expect 1 parameter - the HTMLElement which got upgraded.
+* @returns {undefined} No return.
 */
 function registerUpgradedCallbackInternal(jsClass, callback) {
-	var regClass = findRegisteredClass_(jsClass);
+	const regClass = findRegisteredClass_(jsClass);
 	if (regClass) {
 		regClass.callbacks.push(callback);
 	}
@@ -153,9 +156,10 @@ function registerUpgradedCallbackInternal(jsClass, callback) {
 /**
 * Upgrades all registered components found in the current DOM. This is
 * automatically called on window load.
+* @returns {undefined} No return.
 */
 function upgradeAllRegisteredInternal() {
-	for (var n = 0; n < registeredComponents_.length; n++) {
+	for (let n = 0; n < registeredComponents_.length; n++) {
 		upgradeDomInternal(registeredComponents_[n].className);
 	}
 }

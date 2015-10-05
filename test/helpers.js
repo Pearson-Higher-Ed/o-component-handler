@@ -1,16 +1,14 @@
-'use strict';
-
-var componentHandler = require('../src/js/component-handler');
+const componentHandler = require('../src/js/component-handler');
 
 function toDashCase(str) {
-	return str.replace(/[A-Z]/g, function () { return '-' + arguments[0].toLowerCase() });
+	return str.replace(/[A-Z]/g, () => '-' + arguments[0].toLowerCase());
 }
 
 function lowerCaseFirstChar(str) {
 	return str.charAt(0).toLowerCase() + str.slice(1);
 }
 
-exports.createTestComponentConfig = function (ctor, classAsString) {
+exports.createTestComponentConfig = (ctor, classAsString) => {
 	return {
 		constructor: ctor,
 		classAsString: classAsString,
@@ -18,22 +16,20 @@ exports.createTestComponentConfig = function (ctor, classAsString) {
 	};
 };
 
-exports.createAndRegisterTestComponent = function (ctor, classAsString) {
-	var config = exports.createTestComponentConfig(ctor, classAsString);
+exports.createAndRegisterTestComponent = (ctor, classAsString) => {
+	const config = exports.createTestComponentConfig(ctor, classAsString);
 
 	componentHandler.register(config);
 
 	return config;
 };
 
-exports.createAndAppendComponentDomElement = function (cssClasses) {
+exports.createAndAppendComponentDomElement = (cssClasses) => {
 	if (!Array.isArray(cssClasses)) cssClasses = [cssClasses];
 
-	var el = document.createElement('div');
+	const el = document.createElement('div');
 
-	cssClasses.forEach(function (cssClass) {
-		el.classList.add(cssClass);
-	});
+	cssClasses.forEach((cssClass) => el.classList.add(cssClass));
 
 	document.body.appendChild(el);
 

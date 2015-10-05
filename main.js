@@ -1,6 +1,3 @@
 /*global require, module*/
-'use strict';
 
-module.exports = {
-	foo: require('./src/js/foo')
-};
+module.exports = require('./src/js/component-handler');

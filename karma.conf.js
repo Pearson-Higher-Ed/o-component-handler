@@ -1,7 +1,10 @@
-/*global module*/
-'use strict';
+/*eslint-env node*/
 
-module.exports = function(config) {
+const BowerPlugin = require('bower-webpack-plugin');
+const path = require('path');
+const cwd = process.cwd();
+
+module.exports = function (config) {
 	config.set({
 
 		// base path that will be used to resolve all patterns (eg. files, exclude)
@@ -10,52 +13,74 @@ module.exports = function(config) {
 
 		// frameworks to use
 		// available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-		frameworks: ['mocha', 'browserify'],
+		frameworks: ['mocha', 'sinon'],
+
+
+		// list of plugins
+		plugins: [
+			'karma-mocha',
+			'karma-phantomjs-launcher',
+			'karma-sinon',
+			'karma-sourcemap-loader',
+			'karma-webpack'
+		],
 
 
 		// list of files / patterns to load in the browser
 		files: [
-			// Polyfill PhantomJS as it's a similar Webkit version
 			'http://polyfill.webservices.ft.com/v1/polyfill.js?ua=safari/4',
 			'test/*.test.js'
 		],
 
 
 		// list of files to exclude
-		exclude: [
-		],
+		exclude: [],
 
 
 		// preprocess matching files before serving them to the browser
 		// available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
 		preprocessors: {
-			'test/*.test.js': ['browserify']
+			'test/*.js': ['webpack', 'sourcemap']
 		},
 
 
-		// browserify preprocessor options
-		browserify: {
-			debug: true,
-			transform: ['debowerify', require('browserify-istanbul')({
-				ignore: ['node_modules/**', 'test/**']
-			})]
+		// webpack preprocessor options
+		webpack: {
+			quiet: true,
+			module: {
+				loaders: [
+					{
+						test: /\.js$/,
+						exclude: /node_modules/,
+						loaders: [
+							'babel?optional[]=runtime',
+							'imports?define=>false'
+						]
+					}
+				]
+			},
+			resolve: {
+				root: [path.join(cwd, 'bower_components')]
+			},
+			plugins: [
+				new BowerPlugin({
+					includes:  /\.js$/
+				})
+			],
+			devtool: 'inline-source-map'
+		},
+
+
+		// Hide webpack output logging
+		webpackMiddleware: {
+			noInfo: true
 		},
 
 
 		// test results reporter to use
 		// possible values: 'dots', 'progress'
 		// available reporters: https://npmjs.org/browse/keyword/karma-reporter
-		reporters: ['progress', 'coverage'],
-
-
-		// coverage reporter options
-		coverageReporter: {
-			dir: 'build/reports/coverage',
-			reporters: [
-				{ type: 'lcovonly', subdir: '.', file: 'coverage.lcov' },
-				{ type: 'html', subdir: 'report-html' }
-			]
-		},
+		reporters: ['progress'],
 
 
 		// web server port
@@ -82,7 +107,7 @@ module.exports = function(config) {
 
 		// Continuous Integration mode
 		// if true, Karma captures browsers, runs the tests and exits
-		singleRun: true
+		singleRun: true,
 
 	});
 };

@@ -1,4 +1,4 @@
-# o-component-handler
+# o-component-handler [![Build Status](https://travis-ci.org/Pearson-Higher-Ed/o-component-handler.svg)](https://travis-ci.org/Pearson-Higher-Ed/o-component-handler)
 
 ## License
 
