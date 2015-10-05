@@ -4,14 +4,16 @@
     "test": "./node_modules/karma/bin/karma start karma.conf.js"
   },
   "devDependencies": {
-    "expect.js": "^0.3.1",
+    "babelify": "^5.0.4",
+    "browserify-istanbul": "^0.2.1",
     "debowerify": "Financial-Times/debowerify",
+    "expect.js": "^0.3.1",
     "karma": "^0.12.31",
     "karma-browserify": "^4.0.0",
+    "karma-coverage": "^0.5.2",
     "karma-mocha": "^0.1.10",
     "karma-phantomjs-launcher": "^0.1.4",
-    "mocha": "^2.1.0",
-    "babelify": "^5.0.4"
+    "mocha": "^2.1.0"
   },
   "license": "MIT"
 }
