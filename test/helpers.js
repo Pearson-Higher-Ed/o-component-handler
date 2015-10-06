@@ -1,4 +1,4 @@
-const componentHandler = require('../src/js/component-handler');
+import componentHandler from '../src/js/component-handler';
 
 function toDashCase(str) {
 	return str.replace(/[A-Z]/g, () => '-' + arguments[0].toLowerCase());
