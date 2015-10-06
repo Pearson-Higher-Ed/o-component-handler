@@ -5,6 +5,7 @@
 
 const registeredComponents_ = [];
 const createdComponents_ = [];
+const elements_ = new WeakMap();
 
 
 /**
@@ -98,7 +99,9 @@ function upgradeElementInternal(element, jsClass) {
 		const registeredClass = findRegisteredClass_(jsClass);
 		if (registeredClass) {
 			const Component = registeredClass.classConstructor;
-			createdComponents_.push(new Component(element));
+			const instance = new Component(element);
+			createdComponents_.push(instance);
+			elements_.set(element, instance);
 			// Call any callbacks the user has registered with this component type.
 			registeredClass.callbacks.forEach(function (callback) {
 				callback(element);
@@ -106,9 +109,24 @@ function upgradeElementInternal(element, jsClass) {
 		} else {
 			// If component creator forgot to register, try and see if
 			// it is in global scope.
-			createdComponents_.push(new window[jsClass](element));
+			const instance = new window[jsClass](element);
+			createdComponents_.push(instance);
+			elements_.set(element, instance);
 		}
 	}
+}
+
+
+/**
+ * Gets the upgraded element's class instance for the specified component type.
+ * @param {HTMLElement} element The upgraded element.
+ * @param {string} jsClass The class name of the instance.
+ * @returns {Object | null} The component instance.
+ */
+function getInstanceInternal(element, jsClass) {
+	if (!jsClass) return null;
+	if (!elements_.has(element)) return null;
+	return elements_.get(element);
 }
 
 
@@ -169,6 +187,7 @@ module.exports = {
 	upgradeDom: upgradeDomInternal,
 	upgradeElement: upgradeElementInternal,
 	upgradeAllRegistered: upgradeAllRegisteredInternal,
+	getInstance: getInstanceInternal,
 	registerUpgradedCallback: registerUpgradedCallbackInternal,
 	register: registerInternal
 };

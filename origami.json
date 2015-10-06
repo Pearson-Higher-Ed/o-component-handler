@@ -3,5 +3,10 @@
     "origamiType": "module",
     "origamiVersion": 1,
     "support": "https://github.com/Financial-Times/o-component-handler/issues",
-    "supportStatus": "experimental"
+    "supportStatus": "experimental",
+    "browserFeatures": {
+        "required": [
+            "classlist"
+        ]
+    },"
 }

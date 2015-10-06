@@ -123,25 +123,20 @@ describe('componentHandler', () => {
 
 	});
 
-	describe('.register(config)', () => {
+	describe('.upgradeAllRegistered()', () => {
 
-		it('should upgrade the existing DOM', () => {
-			function ComponentTestRegister() {}
+		it('should upgrade all registered components on the page', () => {
+			const config = createAndRegisterTestComponent(() => {},
+				'ComponentTestUpgradeElement');
+			const config2 = createAndRegisterTestComponent(() => {},
+				'ComponentTestUpgradeElement2');
+			const el = createAndAppendComponentDomElement(config.cssClass);
+			const el2 = createAndAppendComponentDomElement(config2.cssClass);
 
-			const config = {
-				constructor: ComponentTestRegister,
-				classAsString: 'ComponentTestRegister',
-				cssClass: 'component-test-register'
-			};
-
-			const el = document.createElement('div');
-
-			el.classList.add(config.cssClass);
-			document.body.appendChild(el);
-
-			componentHandler.register(config);
+			componentHandler.upgradeAllRegistered();
 
 			expect(el.getAttribute('data-upgraded')).to.be(config.classAsString);
+			expect(el2.getAttribute('data-upgraded')).to.be(config2.classAsString);
 		});
 
 	});
@@ -163,20 +158,51 @@ describe('componentHandler', () => {
 
 	});
 
-	describe('.upgradeAllRegistered()', () => {
+	describe('.getInstance(element, jsClass)', () => {
 
-		it('should upgrade all registered components on the page', () => {
-			const config = createAndRegisterTestComponent(() => {},
-				'ComponentTestUpgradeElement');
-			const config2 = createAndRegisterTestComponent(() => {},
-				'ComponentTestUpgradeElement2');
+		it('should return null when jsClass is undefined', () => {
+			expect(componentHandler.getInstance(document.body)).to.be(null);
+		});
+
+		it('should return null when there is no instance of jsClass', () => {
+			expect(componentHandler.getInstance(document.body, 'NoInstance')).to.be(null);
+		});
+
+		it('should return the instance', () => {
+			function ComponentTestGetInstance() {}
+
+			const config = createAndRegisterTestComponent(ComponentTestGetInstance,
+				'ComponentTestGetInstance');
 			const el = createAndAppendComponentDomElement(config.cssClass);
-			const el2 = createAndAppendComponentDomElement(config2.cssClass);
 
-			componentHandler.upgradeAllRegistered();
+			componentHandler.upgradeElement(el, config.classAsString);
+
+			const instance = componentHandler.getInstance(el, config.classAsString);
+
+			expect(instance instanceof ComponentTestGetInstance).to.be(true);
+		});
+
+	});
+
+	describe('.register(config)', () => {
+
+		it('should upgrade the existing DOM', () => {
+			function ComponentTestRegister() {}
+
+			const config = {
+				constructor: ComponentTestRegister,
+				classAsString: 'ComponentTestRegister',
+				cssClass: 'component-test-register'
+			};
+
+			const el = document.createElement('div');
+
+			el.classList.add(config.cssClass);
+			document.body.appendChild(el);
+
+			componentHandler.register(config);
 
 			expect(el.getAttribute('data-upgraded')).to.be(config.classAsString);
-			expect(el2.getAttribute('data-upgraded')).to.be(config2.classAsString);
 		});
 
 	});

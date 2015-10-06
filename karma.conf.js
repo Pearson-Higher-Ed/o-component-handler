@@ -54,6 +54,7 @@ module.exports = function (config) {
 						exclude: /node_modules/,
 						loaders: [
 							'babel?optional[]=runtime',
+							// Disables AMD module loading
 							'imports?define=>false'
 						]
 					}

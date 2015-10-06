@@ -58,6 +58,13 @@ componentHandler.registerUpgradedCallback('ExampleComponent', () => {
 componentHandler.upgradeDom('ExampleComponent');
 ```
 
+### componentHandler.getInstance(element, jsClass)
+
+Gets the upgraded element's class instance for the specified component type.
+
+* element **HTMLElement**: The upgraded element.
+* jsClass **string**: The class name of the instance.
+
 ### componentHandler.register(config)
 
 Registers a class for future use and attempts to upgrade existing DOM. This method should be invoked by the Origami component implementation.
