@@ -183,7 +183,7 @@ function upgradeAllRegisteredInternal() {
 
 
 // Export the public API
-module.exports = {
+export default {
 	upgradeDom: upgradeDomInternal,
 	upgradeElement: upgradeElementInternal,
 	upgradeAllRegistered: upgradeAllRegisteredInternal,

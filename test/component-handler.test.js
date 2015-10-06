@@ -1,12 +1,11 @@
 /*global describe, it, before, beforeEach, sinon*/
 
-const expect = require('expect.js');
-const componentHandler = require('../src/js/component-handler');
-
-const {
+import expect from 'expect.js';
+import componentHandler from '../main';
+import {
 	createAndRegisterTestComponent,
 	createAndAppendComponentDomElement
-} = require('./helpers');
+} from './helpers';
 
 describe('componentHandler', () => {
 

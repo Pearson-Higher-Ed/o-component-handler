@@ -1,3 +1,3 @@
 /*global require, module*/
 
-module.exports = require('./src/js/component-handler');
+export { default } from './src/js/component-handler';
