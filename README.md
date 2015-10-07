@@ -1,4 +1,4 @@
-# o-component-handler [![Build Status](https://travis-ci.org/Pearson-Higher-Ed/o-component-handler.svg)](https://travis-ci.org/Pearson-Higher-Ed/o-component-handler)
+# o-component-handler [![Build Status](https://travis-ci.org/Pearson-Higher-Ed/o-component-handler.svg)](https://travis-ci.org/Pearson-Higher-Ed/o-component-handler) [![Coverage Status](https://coveralls.io/repos/Pearson-Higher-Ed/o-component-handler/badge.svg?branch=master&service=github)](https://coveralls.io/github/Pearson-Higher-Ed/o-component-handler?branch=master)
 
 Handles registration of new Origami components so that DOM upgrades are handled on page load and elements can be upgraded after initial page load.
 

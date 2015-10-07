@@ -1,11 +1,14 @@
 /*eslint-env node*/
+/*eslint strict:0*/
 
 const BowerPlugin = require('bower-webpack-plugin');
 const path = require('path');
 const cwd = process.cwd();
 
-module.exports = function (config) {
-	config.set({
+module.exports = (config) => {
+	'use strict';
+
+	const settings = {
 
 		// base path that will be used to resolve all patterns (eg. files, exclude)
 		basePath: '',
@@ -18,6 +21,7 @@ module.exports = function (config) {
 
 		// list of plugins
 		plugins: [
+			'karma-coverage',
 			'karma-mocha',
 			'karma-phantomjs-launcher',
 			'karma-sinon',
@@ -110,5 +114,31 @@ module.exports = function (config) {
 		// if true, Karma captures browsers, runs the tests and exits
 		singleRun: true
 
-	});
+	};
+
+	if (process.env.COVERAGE) {
+		const webpackModuleSettings = settings.webpack.module;
+
+		settings.reporters = (settings.reporters || []).concat(['coverage']);
+
+		settings.coverageReporter = {
+			dir: 'build/reports/coverage',
+			reporters: [
+				{ type: 'lcovonly', subdir: '.', file: 'coverage.lcov' },
+				{ type: 'html', subdir: 'report-html' }
+			]
+		};
+
+		webpackModuleSettings.loaders =
+			(webpackModuleSettings.loaders || []).concat([
+				{
+                    test: /\.js$/,
+                    // include: path.resolve('src/js/'),
+                    exclude: /(test|node_modules|bower_components)/,
+                    loader: 'isparta'
+                }
+			]);
+	}
+
+	config.set(settings);
 };
