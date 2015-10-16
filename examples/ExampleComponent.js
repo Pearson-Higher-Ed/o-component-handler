@@ -1,8 +1,6 @@
-const componentHandler = require('o-component-handler');
+import componentHandler from 'o-component-handler';
 
-module.exports = ExampleComponent;
-
-class ExampleComponent {
+export default class ExampleComponent {
 
 	constructor(element) {
 		this.element_ = element;
