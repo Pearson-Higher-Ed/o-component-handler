@@ -183,27 +183,4 @@ describe('componentHandler', () => {
 
 	});
 
-	describe('.register(config)', () => {
-
-		it('should upgrade the existing DOM', () => {
-			function ComponentTestRegister() {}
-
-			const config = {
-				constructor: ComponentTestRegister,
-				classAsString: 'ComponentTestRegister',
-				cssClass: 'component-test-register'
-			};
-
-			const el = document.createElement('div');
-
-			el.classList.add(config.cssClass);
-			document.body.appendChild(el);
-
-			componentHandler.register(config);
-
-			expect(el.getAttribute('data-upgraded')).to.be(config.classAsString);
-		});
-
-	});
-
 });
