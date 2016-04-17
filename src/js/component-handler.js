@@ -149,8 +149,6 @@ function registerInternal(config) {
 	if (!found) {
 		registeredComponents_.push(newConfig);
 	}
-
-	upgradeDomInternal(config.classAsString, config.cssClass);
 }
 
 
